@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "641462107079",
+    "project_id": "homequest-8eded",
+    "storage_bucket": "homequest-8eded.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:641462107079:android:4aec90432f7961b4aab7e2",
+        "android_client_info": {
+          "package_name": "com.example.homequest"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDxTac9ktn2ZF1Y4oEcwtoqhB0I_BasOE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
