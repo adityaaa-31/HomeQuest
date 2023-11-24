@@ -10,6 +10,8 @@ class savedlisting extends StatefulWidget {
 class _savedlistingState extends State<savedlisting> {
   @override
   Widget build(BuildContext context) {
-    return Container(child: Text('saved'),);
+    return Container(
+      child: Center(child: Text('saved listings')),
+    );
   }
 }

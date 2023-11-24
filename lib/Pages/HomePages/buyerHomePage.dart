@@ -50,7 +50,7 @@ class _buyerHomeState extends State<buyerHome> {
         ),
         centerTitle: true,
         leading: GestureDetector(
-          child: Icon(Icons.home_outlined),
+          child: Icon(Icons.power_settings_new_rounded),
           onTap: signout,
         ),
         elevation: 0,

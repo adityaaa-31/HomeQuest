@@ -1,6 +1,4 @@
 // import 'dart:math';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:homequest/Pages/AuthPages/ownerLogin.dart';
 import 'package:homequest/services/authService.dart';
@@ -69,6 +67,7 @@ class _signupState extends State<signup> {
                     if (value!.isEmpty) {
                       return 'Please enter a valid name';
                     }
+                    return null;
                   },
                   onSaved: (value) {
                     setState(() {
@@ -122,6 +121,7 @@ class _signupState extends State<signup> {
                     if (value!.length < 6) {
                       return 'Invalid Password';
                     }
+                    return null;
                   },
                   onSaved: (value) {
                     setState(() {
