@@ -1,15 +1,29 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 class ListingDetailScreen extends StatelessWidget {
+  final String bhk;
+  final String type;
+  final String property;
+  final String price;
   final String title;
   final String description;
+  final String area;
+  final String user;
   final List<String> images;
 
   ListingDetailScreen({
     required this.title,
     required this.description,
     required this.images,
+    required this.bhk,
+    required this.price,
+    required this.type,
+    required this.property,
+    required this.area,
+    required this.user,
   });
 
   @override
@@ -41,11 +55,16 @@ class ListingDetailScreen extends StatelessWidget {
               items: images.map((image) {
                 return Builder(
                   builder: (BuildContext context) {
-                    return Hero(
-                      tag: image, // Unique tag for each image
-                      child: Image.network(
-                        image,
-                        fit: BoxFit.cover,
+                    return Container(
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                      ),
+                      child: Hero(
+                        tag: image, // Unique tag for each image
+                        child: Image.network(
+                          image,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     );
                   },
@@ -57,32 +76,97 @@ class ListingDetailScreen extends StatelessWidget {
             height: 15,
           ),
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(10.0),
             child: Text(
-              'About this property',
+              title,
               style: TextStyle(fontSize: 25, fontFamily: 'Poppins'),
             ),
           ),
+          SizedBox(
+            height: 15,
+          ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            padding: const EdgeInsets.all(10.0),
+            child: Text(
+              'About this property',
+              style: TextStyle(
+                  fontSize: 19,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 10.0, bottom: 10),
+            child: Row(
               children: [
-                Text(
-                  'BHK',
-                  style: TextStyle(fontSize: 16, fontFamily: 'Poppins'),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'BHK',
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      'Rent/Month',
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      'Property Type ',
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      'Area in SqFT',
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
                 ),
-                Text(
-                  'Rent/Month',
-                  style: TextStyle(fontSize: 16, fontFamily: 'Poppins'),
+                SizedBox(
+                  width: 30,
                 ),
-                Text(
-                  'Property Type',
-                  style: TextStyle(fontSize: 16, fontFamily: 'Poppins'),
-                ),
-                Text(
-                  'Area in SqFT',
-                  style: TextStyle(fontSize: 16, fontFamily: 'Poppins'),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      bhk,
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.normal),
+                    ),
+                    Text(
+                      price,
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.normal),
+                    ),
+                    Text(
+                      type,
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.normal),
+                    ),
+                    Text(
+                      area,
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.normal),
+                    ),
+                  ],
                 ),
               ],
             ),

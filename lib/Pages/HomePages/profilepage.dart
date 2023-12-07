@@ -80,10 +80,15 @@ class _profilepageState extends State<profilepage> {
                   itemCount: listings.length,
                   itemBuilder: (context, index) {
                     final listing = listings[index];
+                    final bhk = listing['bhk'];
                     final title = listing['title'];
                     final description = listing['description'];
                     final price = listing['price'];
+                    final type = listing['type'];
+                    final property = listing['property'];
+                    final area = listing['area'];
                     final images = List<String>.from(listing['images']);
+                    final user = listing['uid'];
 
                     return GestureDetector(
                       onTap: () {
@@ -93,6 +98,12 @@ class _profilepageState extends State<profilepage> {
                               title: title,
                               description: description,
                               images: images,
+                              bhk: bhk,
+                              price: price,
+                              type: type,
+                              property: property,
+                              area: area,
+                              user: user,
                             ),
                           ),
                         );

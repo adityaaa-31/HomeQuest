@@ -56,10 +56,18 @@ class _HomePageState extends State<HomePage> {
                     // final isExpanded = index == expandedListingIndex;
 
                     final listing = listings[index];
-                    final title = listing['title'];
+                    final bhk = listing['bhk'];
+                    final city = listing['city'];
+                    final type = listing['type'];
+                    final property = listing['property'];
                     final description = listing['description'];
                     final price = listing['price'];
                     final images = List<String>.from(listing['images']);
+                    final area = listing['area'];
+                    final user = listing['uid'];
+
+                    final title =
+                        '${bhk} BHK ${property} for ${type} in ${city}';
 
                     return GestureDetector(
                       onTap: () {
@@ -69,41 +77,57 @@ class _HomePageState extends State<HomePage> {
                               title: title,
                               description: description,
                               images: images,
+                              bhk: bhk,
+                              price: price,
+                              type: type,
+                              property: property,
+                              area: area,
+                              user: user,
                             ),
                           ),
                         );
                       },
-                      child: Row(
-                        children: [
-                          Container(
-                            height: 120,
-                            padding: EdgeInsets.only(bottom: 8),
-                            child: Hero(
-                              tag: images[0],
-                              child: Image.network(
-                                images.first,
-                                width: 100,
-                                height: 200,
-                                fit: BoxFit.cover,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            border: Border.all(),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(15))),
+                        child: Row(
+                          children: [
+                            Container(
+                              height: 120,
+                              padding: EdgeInsets.all(4),
+                              child: Hero(
+                                tag: images[0],
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Image.network(
+                                    images.first,
+                                    width: 100,
+                                    height: 200,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                          SizedBox(
-                            width: 16,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                title,
-                                style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              Text(price),
-                            ],
-                          )
-                        ],
+                            SizedBox(
+                              width: 16,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  title,
+                                  style: TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(price),
+                              ],
+                            )
+                          ],
+                        ),
                       ),
                     );
                   },

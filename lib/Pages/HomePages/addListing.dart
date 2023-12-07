@@ -17,9 +17,9 @@ class addlistingspage extends StatefulWidget {
 
 class _addlistingspageState extends State<addlistingspage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  TextEditingController floorController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   TextEditingController priceController = TextEditingController();
+  TextEditingController areaController = TextEditingController();
 
   List<String> propertyTypes = ['Apartment', 'Bunglow', 'PG/Hostel', 'Other'];
   List<String> listingTypes = ['Sale', 'Rent'];
@@ -51,7 +51,7 @@ class _addlistingspageState extends State<addlistingspage> {
   String selectedPropertyType = 'Apartment';
   String selectedListingType = 'Sale';
   String selectedBHKType = '1';
-  String selectedCity = '';
+  String selectedCity = 'Pune';
 
   List<File> selectedImages = [];
   final uid = FirebaseAuth.instance.currentUser!.uid;
@@ -72,6 +72,8 @@ class _addlistingspageState extends State<addlistingspage> {
         // Store the images in Firebase Storage
         List<String> imageUrls = await uploadImages(selectedImages);
 
+        Navigator.pop(context);
+
         showDialog(
           context: context,
           builder: (context) {
@@ -88,7 +90,9 @@ class _addlistingspageState extends State<addlistingspage> {
           'type': selectedListingType,
           'property': selectedPropertyType,
           'bhk': selectedBHKType,
+          'city': selectedCity,
           'images': imageUrls,
+          'area': areaController.text,
           'timestamp': FieldValue.serverTimestamp(),
         });
 
@@ -105,11 +109,16 @@ class _addlistingspageState extends State<addlistingspage> {
 
         // Clear the form and image list
 
-        descriptionController.clear();
-
-        priceController.clear();
         setState(() {
+          descriptionController.clear();
+          areaController.clear();
+          priceController.clear();
           selectedImages.clear();
+
+          selectedPropertyType = 'Apartment';
+          selectedListingType = 'Sale';
+          selectedBHKType = '1';
+          selectedCity = 'Pune';
         });
 
         // Display a success message or navigate to a different screen.
@@ -124,6 +133,15 @@ class _addlistingspageState extends State<addlistingspage> {
     List<String> imageUrls = [];
     final storage = FirebaseStorage.instance;
 
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
+
     for (File image in images) {
       final Reference ref = storage.ref().child(
           'house_images/${uid}/${DateTime.now().millisecondsSinceEpoch}');
@@ -133,9 +151,12 @@ class _addlistingspageState extends State<addlistingspage> {
       if (taskSnapshot.state == TaskState.success) {
         final String downloadUrl = await ref.getDownloadURL();
         imageUrls.add(downloadUrl);
+
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Image Uploaded')));
       } else {
         // Handle image upload failure.
-        // Navigator.pop(context);
+        Navigator.pop(context);
 
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text('Something went wrong')));
@@ -181,6 +202,7 @@ class _addlistingspageState extends State<addlistingspage> {
                 height: 15,
               ),
               DropdownButtonFormField<String>(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
                 value: selectedPropertyType,
                 items: propertyTypes.map((String type) {
                   return DropdownMenuItem<String>(
@@ -213,7 +235,7 @@ class _addlistingspageState extends State<addlistingspage> {
                 }).toList(),
                 onChanged: (String? newValue) {
                   setState(() {
-                    selectedPropertyType = newValue!;
+                    selectedBHKType = newValue!;
                   });
                 },
                 decoration: InputDecoration(
@@ -240,7 +262,7 @@ class _addlistingspageState extends State<addlistingspage> {
                   });
                 },
                 decoration: InputDecoration(
-                  labelText: 'BHK',
+                  labelText: 'City',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
                   ),
@@ -259,6 +281,26 @@ class _addlistingspageState extends State<addlistingspage> {
                 validator: (value) {
                   if (value!.isEmpty) {
                     return 'Please enter a price';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              TextFormField(
+                controller: areaController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                    labelText: 'Area Sqft',
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15))),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please enter a value';
                   }
                   return null;
                 },
