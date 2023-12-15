@@ -7,6 +7,7 @@ import 'package:homequest/Pages/AuthPages/customerLogin.dart';
 import 'dart:io';
 
 import 'package:image_picker/image_picker.dart';
+import 'package:uuid/uuid.dart';
 
 class addlistingspage extends StatefulWidget {
   const addlistingspage({super.key});
@@ -20,6 +21,7 @@ class _addlistingspageState extends State<addlistingspage> {
   TextEditingController descriptionController = TextEditingController();
   TextEditingController priceController = TextEditingController();
   TextEditingController areaController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
 
   List<String> propertyTypes = ['Apartment', 'Bunglow', 'PG/Hostel', 'Other'];
   List<String> listingTypes = ['Sale', 'Rent'];
@@ -71,7 +73,7 @@ class _addlistingspageState extends State<addlistingspage> {
       try {
         // Store the images in Firebase Storage
         List<String> imageUrls = await uploadImages(selectedImages);
-
+        String customListingId = Uuid().v4();
         Navigator.pop(context);
 
         showDialog(
@@ -83,7 +85,11 @@ class _addlistingspageState extends State<addlistingspage> {
           },
         );
         // Create a Firestore document with the listing information
-        await FirebaseFirestore.instance.collection('house_listings').add({
+        await FirebaseFirestore.instance
+            .collection('house_listings')
+            .doc(customListingId)
+            .set({
+          'lid': customListingId,
           'uid': uid,
           'description': descriptionController.text,
           'price': priceController.text,
@@ -93,6 +99,7 @@ class _addlistingspageState extends State<addlistingspage> {
           'city': selectedCity,
           'images': imageUrls,
           'area': areaController.text,
+          'address': addressController.text,
           'timestamp': FieldValue.serverTimestamp(),
         });
 
@@ -151,9 +158,6 @@ class _addlistingspageState extends State<addlistingspage> {
       if (taskSnapshot.state == TaskState.success) {
         final String downloadUrl = await ref.getDownloadURL();
         imageUrls.add(downloadUrl);
-
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Image Uploaded')));
       } else {
         // Handle image upload failure.
         Navigator.pop(context);
@@ -288,9 +292,6 @@ class _addlistingspageState extends State<addlistingspage> {
               SizedBox(
                 height: 15,
               ),
-              SizedBox(
-                height: 15,
-              ),
               TextFormField(
                 controller: areaController,
                 keyboardType: TextInputType.number,
@@ -301,6 +302,23 @@ class _addlistingspageState extends State<addlistingspage> {
                 validator: (value) {
                   if (value!.isEmpty) {
                     return 'Please enter a value';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              TextFormField(
+                controller: addressController,
+                decoration: InputDecoration(
+                    hintMaxLines: 3,
+                    labelText: 'Address',
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15))),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please enter a an address';
                   }
                   return null;
                 },
@@ -354,6 +372,10 @@ class _addlistingspageState extends State<addlistingspage> {
                   Container(
                     margin: EdgeInsets.only(left: 40, right: 20),
                     child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.greenAccent,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10))),
                       onPressed: _pickImages,
                       child: Text(
                         'Pick Images',
@@ -365,6 +387,10 @@ class _addlistingspageState extends State<addlistingspage> {
                   Container(
                     margin: EdgeInsets.only(left: 20, right: 20),
                     child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.greenAccent,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10))),
                       onPressed: _submitListing,
                       child: Text(
                         'Submit Listing',

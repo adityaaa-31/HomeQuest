@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
       ),
-      home: Scaffold(resizeToAvoidBottomInset: false, body: mainAuthPage()),
+      home: mainAuthPage(),
     );
   }
 }

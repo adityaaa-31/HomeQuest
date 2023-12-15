@@ -12,11 +12,6 @@ class AuthService {
   static signupUser(String phone, String email, String password, String name,
       BuildContext context) async {
     try {
-      // final user = User(email,name,phone);
-
-      // final _dbref = FirebaseDatabase.instance.ref();
-      // final _userRef = _dbref.child('users');
-
       UserCredential userCrential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
 
@@ -32,16 +27,8 @@ class AuthService {
           textColor: Colors.black,
           fontSize: 16.0);
 
-      // final user = <String, dynamic>{
-      //   'name': name,
-      //   'email': email,
-      //   'phone': phone,
-      //   'uid': userCrential.user!.uid
-      // };
-
-      // _userRef.push().set(user);
-
-      await FirestoreServices.saveUser(name, email, userCrential.user!.uid, phone);
+      await FirestoreServices.saveUser(
+          name, email, userCrential.user!.uid, phone);
 
       FirebaseAuth.instance.signOut();
 
@@ -66,14 +53,14 @@ class AuthService {
 
   static signinUser(String email, password, BuildContext context) async {
     try {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        },
-      );
+      // showDialog(
+      //   context: context,
+      //   builder: (context) {
+      //     return Center(
+      //       child: CircularProgressIndicator(),
+      //     );
+      //   },
+      // );
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
 
@@ -85,7 +72,7 @@ class AuthService {
           backgroundColor: Colors.white,
           textColor: Colors.black,
           fontSize: 16.0);
-      Navigator.pop(context);
+      // Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         ScaffoldMessenger.of(context).showSnackBar(

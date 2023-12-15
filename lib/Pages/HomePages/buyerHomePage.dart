@@ -16,16 +16,15 @@ class buyerHome extends StatefulWidget {
 
 class _buyerHomeState extends State<buyerHome> {
   SnackBar _snackBar = new SnackBar(content: Text('Successfully Logged Out'));
-
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
     const HomePage(),
-    const savedlisting(),
+    SavedListingsPage(),
     const addlistingspage(),
-    const profilepage(),
+    profilepage(),
   ];
-  
+
   signout() {
     FirebaseAuth.instance.signOut();
     ScaffoldMessenger.of(context).showSnackBar(_snackBar);
